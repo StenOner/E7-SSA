@@ -1,1 +1,1 @@
-# E7-ShopAssistant
+# E7-SecretShopAssistant
