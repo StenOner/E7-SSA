@@ -2,10 +2,11 @@ import cv2
 import numpy as np
 
 IMAGE_BASE_PATH = "images/"
+DSIZE = (1280, 720)
 
 def detect_currencies(img_name: str):
     img = cv2.imread(f"{IMAGE_BASE_PATH}{img_name}")
-    resized = cv2.resize(src=img, dsize=(1280, 720), interpolation=cv2.INTER_AREA)
+    resized = cv2.resize(src=img, dsize=DSIZE, interpolation=cv2.INTER_AREA)
     # croped = resized[:60,700:960]
     cv2.rectangle(resized, (700, 0), (960, 60), (0, 255, 0), 2)
 
@@ -17,7 +18,7 @@ def detect_currencies(img_name: str):
  
 def detect_shop_items(img_name: str):
     img = cv2.imread(f"{IMAGE_BASE_PATH}{img_name}")
-    resized = cv2.resize(src=img, dsize=(1280, 720), interpolation=cv2.INTER_AREA)
+    resized = cv2.resize(src=img, dsize=DSIZE, interpolation=cv2.INTER_AREA)
     
     # Detect "Buy" button regions using color-based detection
     hsv = cv2.cvtColor(src=resized, code=cv2.COLOR_BGR2HSV)
@@ -71,15 +72,15 @@ def detect_shop_items(img_name: str):
 def main():
     images = [
         "test1_fail.jpeg",
-        "test2_fail.jpeg",
-        "test1_success.jpg",
-        "test2_success.jpg",
-        "test1_success_achieved.jpg",
-        "test2_success_achieved.jpg",
+        # "test2_fail.jpeg",
+        # "test1_success.jpg",
+        # "test2_success.jpg",
+        # "test1_success_achieved.jpg",
+        # "test2_success_achieved.jpg",
     ]
 
     # result = [detect_shop_items(image) for image in images]
-    result2 = detect_currencies(images[0])
+    result2 = [detect_currencies(image) for image in images]
 
 if __name__ == "__main__":
     main()
