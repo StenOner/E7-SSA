@@ -1,20 +1,27 @@
-import cv2
 import numpy as np
+import cv2
 
-IMAGE_BASE_PATH = "images/"
-DSIZE = (1280, 720)
+IMAGE_BASE_PATH: str = 'images/'
+DSIZE: tuple = (1280, 720)
+CURRENT_GOLD: int = 0
+CURRENT_SKYSTONES: int = 0
 
 def detect_currencies(img_name: str):
+    from paddleocr import PaddleOCR
+
     img = cv2.imread(f"{IMAGE_BASE_PATH}{img_name}")
     resized = cv2.resize(src=img, dsize=DSIZE, interpolation=cv2.INTER_AREA)
-    # croped = resized[:60,700:960]
-    cv2.rectangle(resized, (700, 0), (960, 60), (0, 255, 0), 2)
+    cropped = resized[:60,700:960]
+    ocr = PaddleOCR(
+        use_doc_orientation_classify=False,
+        use_doc_unwarping=False)
 
-    cv2.imshow('Detected Items', resized)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
-
-    return 1
+    result = ocr.predict(input=cropped)
+    if not result or not result[0]:
+        raise Exception('Could not find currencies')
+    
+    global CURRENT_GOLD, CURRENT_SKYSTONES
+    [CURRENT_GOLD, CURRENT_SKYSTONES] = [int(currency.replace(',','')) for currency in result[0]['rec_texts']]
  
 def detect_shop_items(img_name: str):
     img = cv2.imread(f"{IMAGE_BASE_PATH}{img_name}")
@@ -72,15 +79,15 @@ def detect_shop_items(img_name: str):
 def main():
     images = [
         "test1_fail.jpeg",
-        # "test2_fail.jpeg",
+        "test2_fail.jpeg",
         # "test1_success.jpg",
         # "test2_success.jpg",
         # "test1_success_achieved.jpg",
         # "test2_success_achieved.jpg",
     ]
 
-    # result = [detect_shop_items(image) for image in images]
-    result2 = [detect_currencies(image) for image in images]
+    result = [detect_shop_items(image) for image in images]
+    [detect_currencies(image) for image in images]
 
 if __name__ == "__main__":
     main()
