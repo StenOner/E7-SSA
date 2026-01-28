@@ -2,7 +2,7 @@ import numpy as np
 import cv2
 
 import os
-os.environ["DISABLE_MODEL_SOURCE_CHECK"] = "True"
+os.environ['DISABLE_MODEL_SOURCE_CHECK'] = 'True'
 
 IMAGE_BASE_PATH: str = 'images/'
 DSIZE: tuple = (1280, 720)
