@@ -1,9 +1,10 @@
 from ppadb.client import Client as AdbClient
+from ppadb.device import Device
 
 BASE_SCREENSHOT_PATH: str = 'screenshots'
-SELECTED_DEVICE: any
+SELECTED_DEVICE: Device
 
-def main():
+def select_device():
     client = AdbClient(host='127.0.0.1', port=5037)
     devices = client.devices()
 
@@ -25,7 +26,17 @@ def main():
         except:
             print('Invalid index or value.')
 
-    take_screenshot()
+def tap(coordinates: tuple = (0, 0)):
+    SELECTED_DEVICE.shell(cmd=f"input tap {coordinates[0]} {coordinates[1]}")
+
+def long_tap(coordinates: tuple = (0, 0), duration: int = 1_000):
+    SELECTED_DEVICE.shell(cmd=f"input swipe {coordinates[0]} {coordinates[1]} {coordinates[0]} {coordinates[1]} {duration}")
+
+def swipe(starting: tuple = (0, 0), ending: tuple = (0, 0), duration: int = 1_000):
+    SELECTED_DEVICE.shell(cmd=f"input swipe {starting[0]} {starting[1]} {ending[0]} {ending[1]} {duration}")
+
+def type(text: str):
+    SELECTED_DEVICE.shell(cmd=f"input text {text}")
 
 def take_screenshot() -> str:
     screenshot_name = generate_random_name()
@@ -41,4 +52,4 @@ def generate_random_name() -> str:
     return f"{file_name}.png"
 
 if __name__ == '__main__':
-    main()
+    select_device()
