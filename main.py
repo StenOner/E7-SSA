@@ -1,6 +1,6 @@
 import numpy as np
-from ocr import cv2
-import ocr
+from ocr_lib import cv2
+import ocr_lib
 
 IMAGE_BASE_PATH: str = 'images/'
 DSIZE: tuple = (1280, 720)
@@ -113,7 +113,7 @@ def main():
 
     # result = [detect_shop_items(image) for image in images]
     # result2 = [detect_refresh_button(image) for image in images]
-    [ocr.detect_currencies(image) for image in images]
+    [ocr_lib.detect_currencies(image) for image in images]
 
 if __name__ == '__main__':
     main()
