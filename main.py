@@ -71,12 +71,9 @@ def main():
             cv2.imread(f'{BASE_SCREENSHOT_PATH}/{screenshot}'),
             [detector.templates['tc'], detector.templates['tm']],
         )
-        buy_buttons = detector.find_green_buy_buttons(cv2.imread(f'{BASE_SCREENSHOT_PATH}/{screenshot}'))
-        # matching_buy_buttons = detector.match_with_green_button(detections, buy_buttons)
         matching_buy_buttons = detector.estimate_green_button_position(detections, adb_lib.DEVICE_DIMENSIONS)
         
         for matches in matching_buy_buttons:
-            # x, y, w, h = matches['item_bbox']
             button_x, button_y, button_w, button_h = matches['buy_button_bbox']
             sleep(0.5*SLOW_FACTOR)
             press_center_of_button((button_x, button_y, button_w, button_h))
@@ -86,7 +83,7 @@ def main():
         print('\n'+'='*80)
         print('Detected Items:', detections)
         print('='*80)
-        # adb_lib.delete_screenshot(f'{BASE_SCREENSHOT_PATH}/{screenshot}')
+        adb_lib.delete_screenshot(f'{BASE_SCREENSHOT_PATH}/{screenshot}')
         
         if should_swipe_down:
             should_swipe_down = not should_swipe_down
